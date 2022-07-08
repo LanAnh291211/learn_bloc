@@ -16,17 +16,6 @@ class ToDoListState {
       );
 }
 
-// class ToDoListInitial extends ToDoListState {}
-
-// class ToState {
-
-//   ToState(this.type, this.list);
-
-//   ToState copy(ToStateType newType, List<String> newList) => ToState(
-//         newType,
-//         newList,
-//       );
-// }
 
 enum ToDoStateType {
   initial,

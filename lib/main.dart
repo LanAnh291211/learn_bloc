@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',// mỗi ng 1 cách code mà a :v thôi kệ đi :v 
+      title: 'Flutter Demo', //
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -37,60 +37,55 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
     return BlocProvider(
       create: (context) => ToDoListBloc(),
       child: BlocConsumer<ToDoListBloc, ToDoListState>(
-        listener: (context, state) {
-         
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Flutter Demo'),
             ),
-            body: body(state),
+            body: Column(
+              children: [
+                TextFormField(
+                  controller: controller,
+
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.list.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(state.list[index]),
+                            GestureDetector(
+                              child: Icon(Icons.delete),
+                              onTap: () {
+                                context.read<ToDoListBloc>()..add(Delete(index));
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }, //: ${controller.value.text}
+                  ),
+                ),
+              ],
+            ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                final bloc = context.read<ToDoListBloc>();
-                bloc.add(Add('Hello Vivian'));
+                context.read<ToDoListBloc>()..add(Add(controller.value.text));
               },
               child: const Icon(Icons.add),
             ),
-
-            
-            
           );
         },
       ),
     );
   }
-
-  Widget body(ToDoListState state) {
-    switch (state.type) {
-      case ToDoStateType.initial:
-        return Container(
-          color: Colors.red,
-        );
-
-      case ToDoStateType.loaded:
-        return ListView.builder(
-          itemCount: state.list.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(state.list[index]),
-              onTap: () {
-                final bloc = context.read<ToDoListBloc>();
-                bloc.add(Delete(index));
-              },
-            );
-          },
-        );
-
-      default:
-        return Container(
-          color: Colors.green,
-        );
-    }
-  }
 }
-
